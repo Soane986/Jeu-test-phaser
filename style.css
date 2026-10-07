@@ -1,0 +1,128 @@
+:root {
+    --bg: #0e024f;
+    --bg2: #2600ff;
+    --fg: #f1ecff;
+    --fgbutton: #050606;
+    --accent: #ffcf5c;
+    --muted: #9a93b8;
+    --border: #340ce4;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    font-family: "Courier New", Consolas, monospace;
+    color: var(--fg);
+    background:
+        radial-gradient(circle at 50% 30%, var(--bg2), var(--bg) 70%);
+}
+
+#app { width: min(92vw, 640px); padding: 24px 0; }
+
+.screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+.screen.active { display: flex; animation: fade .35s ease; }
+
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+
+h1 {
+    font-size: clamp(2.2rem, 8vw, 3.6rem);
+    letter-spacing: .12em;
+    color: var(--accent);
+    text-shadow: 4px 4px 0 #000;
+}
+h2 { font-size: 1.8rem; color: var(--accent); text-shadow: 3px 3px 0 #000; }
+.subtitle { color: var(--muted); font-style: italic; }
+
+/* Sprite : 12 frames de 16x16 agrandies x6 (feuille de 1152x96) */
+.sprite {
+    width: 96px;
+    height: 96px;
+    background: url("src/assets/Sprite test .png") 0 0 / 1152px 96px no-repeat;
+    image-rendering: pixelated;
+    animation: walk 1.2s steps(12) infinite;
+}
+@keyframes walk {
+    from { background-position: 0 0; }
+    to   { background-position: -1152px 0; }
+}
+
+.menu { display: flex; flex-direction: column; gap: 12px; width: min(80vw, 300px); margin-top: 8px; }
+.row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+button {
+    font: inherit;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding: 12px 24px;
+    color: var(--fgbutton);
+    background: var(--bg2);
+    border: 3px solid var(--border);
+    box-shadow: 4px 4px 0 #000;
+    cursor: pointer;
+    transition: transform .08s, background .15s, border-color .15s;
+}
+button:hover, button:focus-visible {
+    background: var(--border);
+    border-color: var(--accent);
+    color: var(--accent);
+    outline: none;
+    transform: translate(-1px, -1px);
+}
+button:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 #000; }
+button.secondary { font-size: .95rem; color: var(--muted); }
+button[hidden] { display: none; }
+
+.mode-label { color: var(--muted); letter-spacing: .15em; text-transform: uppercase; font-size: .85rem; }
+#controls-view-label {
+    color: var(--fg);
+    letter-spacing: normal;
+    text-transform: none;
+    font-size: inherit;
+    font-weight: bold;
+    text-align: left;
+}
+
+.story {
+    min-height: 220px;
+    width: 100%;
+    padding: 20px;
+    text-align: left;
+    line-height: 1.7;
+    background: rgba(0, 0, 0, .35);
+    border: 3px solid var(--border);
+    box-shadow: 4px 4px 0 #000;
+}
+.story p + p { margin-top: 1em; }
+.story .cursor::after { content: "▌"; color: var(--accent); animation: blink .8s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.keys { border-collapse: collapse; width: 100%; }
+.keys th, .keys td { padding: 10px; border-bottom: 2px solid var(--border); }
+.keys th { color: var(--accent); }
+.keys td:first-child { text-align: left; color: var(--fg); font-weight: bold; }
+#screen-controls:not(.view-duo) .p2-col { display: none; }
+kbd {
+    display: inline-block;
+    min-width: 2.2em;
+    padding: 3px 8px;
+    background: var(--bg2);
+    color: var(--fgbutton);
+    font-weight: bold;
+    border: 2px solid var(--accent);
+    border-bottom-width: 4px;
+}
+.note { color: var(--muted); font-size: .9rem; }
+
+.credits { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.credits span { display: block; color: var(--accent); font-size: .85rem; text-transform: uppercase; letter-spacing: .1em; }
