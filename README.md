@@ -43,7 +43,10 @@ src/index.js            navigation du menu, configuration et lancement de Phaser
 src/js/chargement.js    scène de chargement : assets et animations
 src/js/niveau.js        classe de base des niveaux (joueur, tir, ennemis, portes, items, timers)
 src/js/niveau1.js       niveau 1 : la grotte (map_1)
-src/js/niveau2.js       niveau 2 : la salle secrète (map_2)
+src/js/niveau2.js       niveau 2 : les galeries, 11 ennemis, 1re lanterne (map_2)
+src/js/niveau3.js       niveau 3 : les profondeurs, 14 ennemis, 2e lanterne (map_3)
+src/js/niveau4.js       niveau 4 : le cœur de la grotte, 17 ennemis, 3e lanterne (map_4)
+src/js/secret.js        salle secrète, accessible par la porte cachée du niveau 1 (map_secret)
 src/js/pvp.js           mode duo : arène, deux joueurs, barres de vie, manches (map_pvp)
 src/js/hud.js           affichage : vies, score, temps, messages
 src/js/fin.js           écran de victoire / game over
@@ -52,8 +55,8 @@ src/assets/             images, sons et cartes Tiled
 
 ## Modifier les cartes
 
-Les cartes du jeu sont les fichiers `src/assets/map_1.json`, `map_2.json` et `map_pvp.json`. Ce sont des cartes Tiled au format JSON : elles s'ouvrent directement dans Tiled (*Fichier → Ouvrir*), et un simple *Enregistrer* suffit pour que le jeu prenne la modification.
+Les cartes du jeu sont les fichiers `src/assets/map_1.json` à `map_4.json`, `map_secret.json` et `map_pvp.json`. Ce sont des cartes Tiled au format JSON : elles s'ouvrent directement dans Tiled (*Fichier → Ouvrir*), et un simple *Enregistrer* suffit pour que le jeu prenne la modification.
 
 Le jeu de tuiles (`crystal_cave_tiles.png`, dans le même dossier) est intégré à chaque carte.
 
-Noms des objets reconnus dans le calque d'objets : `Spawn`, `Item`, `ennemi 1` (rat), `ennemi 2` (gobelin), `door` ; pour l'arène : `Spawn 1`, `Spawn 2`, `Item`.
+Noms des objets reconnus dans le calque d'objets : `Spawn`, `Item`, `ennemi 1` (rat), `ennemi 2` (gobelin), `door`, `lanterne` ; pour l'arène : `Spawn 1`, `Spawn 2`, `Item`.

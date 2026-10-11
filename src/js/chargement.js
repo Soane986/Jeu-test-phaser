@@ -6,6 +6,7 @@ export function nouvellePartie(registry) {
     registry.set("vies", 5);
     registry.set("score", 0);
     registry.set("temps", 0);
+    registry.set("lanternes", 0); // lanternes rallumées (il en faut 3 pour gagner)
     registry.set("manches1", 0); // manches gagnées par chaque joueur en mode duo
     registry.set("manches2", 0);
     registry.set("bouclier", 0);
@@ -25,6 +26,9 @@ export default class chargement extends Phaser.Scene {
         // cartes Tiled et jeu de tuiles
         this.load.tilemapTiledJSON("carte_1", "src/assets/map_1.json");
         this.load.tilemapTiledJSON("carte_2", "src/assets/map_2.json");
+        this.load.tilemapTiledJSON("carte_3", "src/assets/map_3.json");
+        this.load.tilemapTiledJSON("carte_4", "src/assets/map_4.json");
+        this.load.tilemapTiledJSON("carte_secret", "src/assets/map_secret.json");
         this.load.tilemapTiledJSON("carte_pvp", "src/assets/map_pvp.json");
         this.load.image("img_tuiles", "src/assets/crystal_cave_tiles.png");
         // le même jeu de tuiles, découpé en frames pour en tirer des sprites (le cristal)
@@ -38,6 +42,7 @@ export default class chargement extends Phaser.Scene {
 
         // objets
         this.load.spritesheet("img_porte", "src/assets/porte.png", { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet("img_lanterne", "src/assets/lanterne.png", { frameWidth: 40, frameHeight: 56 });
         this.load.spritesheet("img_coeur", "src/assets/coeur.png", { frameWidth: 7, frameHeight: 7 });
         this.load.image("img_balle", "src/assets/balle.png");
         this.load.image("img_balle2", "src/assets/balle2.png");
@@ -119,6 +124,20 @@ export default class chargement extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers("img_gobelin", { start: 6, end: 9 }),
             frameRate: 9,
             repeat: 0
+        });
+
+        // --- animations de la lanterne : la flamme s'allume (frames 0 à 5), puis brûle en boucle ---
+        this.anims.create({
+            key: "anim_lanterne_allume",
+            frames: this.anims.generateFrameNumbers("img_lanterne", { start: 0, end: 5 }),
+            frameRate: 8,
+            repeat: 0
+        });
+        this.anims.create({
+            key: "anim_lanterne_brule",
+            frames: this.anims.generateFrameNumbers("img_lanterne", { start: 6, end: 33 }),
+            frameRate: 10,
+            repeat: -1
         });
 
         // --- animation d'ouverture de la porte ---

@@ -61,6 +61,7 @@ export default class Niveau extends Phaser.Scene {
         this.groupePortes = this.physics.add.staticGroup();
         this.groupeItems = this.physics.add.staticGroup();
         this.indicesChemin = [];
+        this.lanterne = null; // la lanterne à rallumer, s'il y en a une dans ce niveau
 
         // halo de la lanterne : il suit le joueur et éclaire le décor autour de lui
         this.lumiere = this.add.image(0, 0, "img_lumiere").setBlendMode(Phaser.BlendModes.ADD).setAlpha(0.5).setScale(1.5);
@@ -78,6 +79,7 @@ export default class Niveau extends Phaser.Scene {
             if (objet.name == "ennemi 1") this.creerRat(objet.x, this.solSous(objet.x, objet.y));
             if (objet.name == "ennemi 2") this.creerGobelin(objet.x, this.solSous(objet.x, objet.y));
             if (objet.name == "door") this.creerPorte(objet);
+            if (objet.name == "lanterne") this.creerLanterne(objet.x, this.solSous(objet.x, objet.y));
             if (objet.name == "Item") {
                 this.creerItem(objet.x, this.solSous(objet.x, objet.y) - 14, delaiItem);
                 delaiItem += 400;
@@ -143,6 +145,9 @@ export default class Niveau extends Phaser.Scene {
         this.physics.add.overlap(this.joueur, this.groupeEnnemis, this.toucherEnnemi, null, this);
         this.physics.add.overlap(this.joueur, this.groupeCailloux, this.toucherCaillou, null, this);
         this.physics.add.overlap(this.joueur, this.groupeItems, this.ramasserItem, null, this);
+        if (this.lanterne) {
+            this.physics.add.overlap(this.joueur, this.lanterne, this.allumerLanterne, null, this);
+        }
 
         /*************************
          *  BORDS DU MONDE       *
@@ -248,6 +253,13 @@ export default class Niveau extends Phaser.Scene {
         return porte;
     }
 
+    // la lanterne est un sprite statique posé sur le sol, éteinte au départ (frame 0)
+    creerLanterne(x, sol) {
+        this.lanterne = this.physics.add.staticSprite(x, sol - 28, "img_lanterne", 0);
+        this.lanterne.allumee = false;
+        return this.lanterne;
+    }
+
     // à redéfinir dans chaque niveau
     destinationPorte(objet) {
         return { nom: "sortie", scene: "fin" };
@@ -292,12 +304,16 @@ export default class Niveau extends Phaser.Scene {
         }
 
         // interaction avec une porte : il faut être dessus ET appuyer sur la touche d'action
+        // tant que la lanterne du niveau est éteinte, les portes restent verrouillées
+        const verrou = this.lanterne != null && this.lanterne.allumee == false;
         let indice = "";
         this.groupePortes.children.iterate(function (porte) {
-            if (porte.ouverte == false && this.physics.overlap(joueur, porte)) indice = "E : ouvrir la porte";
+            if (porte.ouverte == false && this.physics.overlap(joueur, porte)) {
+                indice = verrou ? "Porte verrouillée : rallume d'abord la lanterne" : "E : ouvrir la porte";
+            }
         }, this);
         this.registry.set("indice", indice);
-        if (Phaser.Input.Keyboard.JustDown(this.touches.action) == true) {
+        if (!verrou && Phaser.Input.Keyboard.JustDown(this.touches.action) == true) {
             this.groupePortes.children.iterate(function (porte) {
                 if (porte.ouverte == false && this.physics.overlap(joueur, porte) == true) {
                     this.ouvrirPorte(porte);
@@ -575,6 +591,22 @@ export default class Niveau extends Phaser.Scene {
             item.destroy();
             this.registry.inc("score", 50);
         }
+    }
+
+    // le joueur touche la lanterne éteinte : elle se rallume et compte parmi les lanternes retrouvées
+    allumerLanterne(joueur, lanterne) {
+        if (lanterne.allumee) return;
+        lanterne.allumee = true;
+        this.registry.inc("lanternes", 1);
+        this.registry.set("vies", 5); // la flamme rend toutes ses vies au joueur
+        this.sound.play("son_item");
+        // la flamme s'allume, puis brûle en boucle
+        lanterne.anims.play("anim_lanterne_allume");
+        lanterne.anims.chain("anim_lanterne_brule");
+        // halo de lumière autour de la lanterne
+        const halo = this.add.image(lanterne.x, lanterne.y, "img_lumiere").setBlendMode(Phaser.BlendModes.ADD).setAlpha(0).setScale(1.8);
+        this.tweens.add({ targets: halo, alpha: 0.6, duration: 600 });
+        this.registry.set("message", "Lanterne rallumée ! (" + this.registry.get("lanternes") + " / 3)\nTes vies sont restaurées, la porte est déverrouillée.");
     }
 
     // le cristal protège de l'acide pendant quelques secondes et révèle le chemin caché

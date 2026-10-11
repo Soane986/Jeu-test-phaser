@@ -2,6 +2,9 @@
 import chargement from "./js/chargement.js";
 import niveau1 from "./js/niveau1.js";
 import niveau2 from "./js/niveau2.js";
+import niveau3 from "./js/niveau3.js";
+import niveau4 from "./js/niveau4.js";
+import secret from "./js/secret.js";
 import hud from "./js/hud.js";
 import pvp from "./js/pvp.js";
 import fin from "./js/fin.js";
@@ -30,17 +33,21 @@ const config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [chargement, niveau1, niveau2, pvp, hud, fin]
+    scene: [chargement, niveau1, niveau2, niveau3, niveau4, secret, pvp, hud, fin]
 };
 
 // Histoire affichée avant le lancement (à modifier librement)
 const STORY = [
-    "Il fut un temps où le village de Brume-Lune brillait de mille lanternes.",
-    "Puis, une nuit, les lumières se sont éteintes une à une. Personne ne sait pourquoi.",
-    "Seule une petite silhouette sombre a osé quitter le village pour retrouver l'origine de l'obscurité.",
+    "Les lanternes de Brume-Lune se sont éteintes.",
+    "Trois lanternes sacrées, cachées dans la grotte, peuvent les rallumer.",
 ];
-const STORY_DUO = "Cette fois, tu n'es pas seul : une autre silhouette, bleue, a quitté le village. Mais il n'y a qu'une lanterne à rallumer... Que le duel commence.";
-const STORY_SOLO = "Personne ne viendra t'aider. Il ne reste que toi, ta petite lanterne et la nuit.";
+// Histoire du mode duo : elle remplace entièrement celle du mode solo
+const STORY_DUO = [
+    "Les lanternes de Brume-Lune se sont éteintes.",
+    "Deux détectives rivaux mènent l'enquête : le noir et le bleu.",
+    "Un seul signera le dossier. Qui va l'emporter ?",
+];
+const STORY_SOLO = "Seul, retrouve-les et rallume-les toutes les trois pour sauver le village.";
 
 const $ = (id) => document.getElementById(id);
 
@@ -73,7 +80,7 @@ function startStory(selectedMode) {
     $("story-skip").hidden = false;
     show("story");
 
-    const paragraphs = [...STORY, mode === "duo" ? STORY_DUO : STORY_SOLO];
+    const paragraphs = mode === "duo" ? STORY_DUO : [...STORY, STORY_SOLO];
     const box = $("story-text");
     box.innerHTML = "";
     const els = paragraphs.map((t) => {

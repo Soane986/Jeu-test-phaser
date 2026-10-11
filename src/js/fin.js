@@ -24,17 +24,17 @@ export default class fin extends Phaser.Scene {
 
         let titre = this.victoire ? "VICTOIRE !" : "GAME OVER";
         let phrase = this.victoire
-            ? "Tu as traversé la grotte : les lanternes de Brume-Lune se rallument."
+            ? "Les 3 lanternes brillent à nouveau : Brume-Lune est sauvé."
             : "L'obscurité a eu raison de toi... pour cette fois.";
         let resultat = "";
         if (this.pvp) {
-            titre = "JOUEUR " + this.gagnant + " GAGNE !";
-            phrase = "Le duel est terminé : une seule lanterne brille encore.";
+            titre = "LE DÉTECTIVE " + (this.gagnant == 1 ? "NOIR" : "BLEU") + " GAGNE !";
+            phrase = "Affaire classée : le joueur " + this.gagnant + " signe seul le dossier de Brume-Lune.";
             resultat = "Manches : " + this.registry.get("manches1") + " - " + this.registry.get("manches2");
         } else {
             const temps = this.registry.get("temps");
             const duree = Math.floor(temps / 60) + ":" + String(temps % 60).padStart(2, "0");
-            resultat = "Score : " + this.registry.get("score") + "     Temps : " + duree;
+            resultat = "Lanternes : " + this.registry.get("lanternes") + " / 3     Score : " + this.registry.get("score") + "     Temps : " + duree;
         }
         this.add.text(512, 130, titre, { fontFamily: POLICE, fontSize: "64px", fontStyle: "bold", color: "#ffcf5c", stroke: "#000000", strokeThickness: 8 }).setOrigin(0.5);
         this.add.text(512, 215, phrase, { fontFamily: POLICE, fontSize: "20px", color: "#f1ecff" }).setOrigin(0.5);

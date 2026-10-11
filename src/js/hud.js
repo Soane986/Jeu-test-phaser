@@ -20,7 +20,10 @@ export default class hud extends Phaser.Scene {
         this.texteScore = this.add.text(1004, 16, "", style).setOrigin(1, 0);
         this.texteTemps = this.add.text(1004, 42, "", style).setOrigin(1, 0);
         this.texteNiveau = this.add.text(512, 16, "", { ...style, color: "#ffcf5c" }).setOrigin(0.5, 0);
-        this.texteBouclier = this.add.text(20, 56, "", { ...style, color: "#7dffb0" });
+        // lanternes rallumées : une petite lanterne et un compteur
+        this.iconeLanterne = this.add.image(32, 76, "img_lanterne", 0).setScale(0.75);
+        this.texteLanternes = this.add.text(54, 64, "", { ...style, color: "#ffcf5c" });
+        this.texteBouclier = this.add.text(20, 104, "", { ...style, color: "#7dffb0" });
         this.texteIndice = this.add.text(512, 520, "", { ...style, color: "#ffcf5c" }).setOrigin(0.5);
         this.texteMessage = this.add.text(512, 110, "", { ...style, fontSize: "18px", align: "center" }).setOrigin(0.5);
         this.dernierMessage = "";
@@ -37,6 +40,10 @@ export default class hud extends Phaser.Scene {
         this.texteTemps.setText("Temps : " + Math.floor(temps / 60) + ":" + secondes);
         this.texteNiveau.setText(this.registry.get("niveau"));
         this.texteIndice.setText(this.registry.get("indice"));
+
+        const lanternes = this.registry.get("lanternes");
+        this.texteLanternes.setText(lanternes + " / 3");
+        this.iconeLanterne.setFrame(lanternes > 0 ? 8 : 0); // éteinte tant qu'aucune n'est rallumée
 
         const bouclier = this.registry.get("bouclier");
         this.texteBouclier.setText(bouclier > 0 ? "Bouclier : " + bouclier + " s" : "");

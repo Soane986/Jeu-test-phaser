@@ -11,16 +11,16 @@ export default class niveau1 extends Niveau {
         super.create();
         // consignes affichées en début de niveau (le HUD les efface après quelques secondes)
         if (!this.arrivee) {
-            this.registry.set("message", "Traverse la grotte et trouve la porte de sortie.\nQ/D : bouger   ESPACE : sauter   Z/S : échelle   H : tirer   E : porte");
+            this.registry.set("message", "Traverse la grotte : les 3 lanternes sont cachées plus loin.\nQ/D : bouger   ESPACE : sauter   Z/S : échelle   H : tirer   E : porte");
         }
     }
 
     // la carte contient deux portes : celle du bas, cachée au-dessus de l'acide, mène à la
-    // salle secrète ; celle du haut, au bout de la grotte, termine le jeu
+    // salle secrète ; celle du haut, au bout de la grotte, mène au niveau 2
     destinationPorte(objet) {
         if (objet.y > this.carte.heightInPixels / 2) {
-            return { nom: "secrete", scene: "niveau2" };
+            return { nom: "secrete", scene: "secret" };
         }
-        return { nom: "finale", scene: "fin" };
+        return { nom: "finale", scene: "niveau2" };
     }
 }
