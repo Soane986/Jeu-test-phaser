@@ -396,8 +396,8 @@ export default class Niveau extends Phaser.Scene {
         if (tireur.peutTirer == false) return;
         var coefDir;
         if (tireur.direction == "left") { coefDir = -1; } else { coefDir = 1; }
-        // on crée la balle à côté du tireur
-        var balle = this.groupeBalles.create(tireur.x + 25 * coefDir, tireur.y + 4, "img_balle");
+        // on crée la balle juste devant le tireur (assez près pour toucher un ennemi collé à lui)
+        var balle = this.groupeBalles.create(tireur.x + 12 * coefDir, tireur.y + 4, "img_balle");
         balle.setScale(2); // même agrandissement que le joueur
         // paramètres physiques de la balle
         balle.setCollideWorldBounds(true);

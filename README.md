@@ -1,4 +1,4 @@
-# Jeu-test-phaser
+# La Dernière Lanterne
 
 Jeu de plate-forme réalisé avec Phaser 3 (BUT MMI – R312).
 
