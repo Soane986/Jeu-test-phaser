@@ -47,7 +47,7 @@ h2 { font-size: 1.8rem; color: var(--accent); text-shadow: 3px 3px 0 #000; }
 .sprite {
     width: 96px;
     height: 96px;
-    background: url("src/assets/Sprite test .png") 0 0 / 1152px 96px no-repeat;
+    background: url("src/assets/joueur1.png") 0 0 / 1152px 96px no-repeat;
     image-rendering: pixelated;
     animation: walk 1.2s steps(12) infinite;
 }
