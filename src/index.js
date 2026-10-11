@@ -1,6 +1,37 @@
+// chargement des scènes du jeu (une classe par fichier)
+import chargement from "./js/chargement.js";
+import niveau1 from "./js/niveau1.js";
+import niveau2 from "./js/niveau2.js";
+import hud from "./js/hud.js";
+import pvp from "./js/pvp.js";
+import fin from "./js/fin.js";
+
 // Navigation entre les écrans + mode de jeu choisi ("solo" ou "duo")
 let mode = null;
 let typingTimer = null;
+let game = null; // le jeu Phaser, créé au lancement d'une partie
+
+// configuration générale du jeu
+const config = {
+    type: Phaser.AUTO,
+    width: 1024,
+    height: 576,
+    parent: "game-container", // le canvas est placé dans l'écran de jeu de la page
+    backgroundColor: "#0b0b12",
+    pixelArt: true, // pas de lissage : les pixels restent nets
+    physics: {
+        default: "arcade",
+        arcade: {
+            gravity: { y: 600 },
+            debug: false
+        }
+    },
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    scene: [chargement, niveau1, niveau2, pvp, hud, fin]
+};
 
 // Histoire affichée avant le lancement (à modifier librement)
 const STORY = [
@@ -8,7 +39,7 @@ const STORY = [
     "Puis, une nuit, les lumières se sont éteintes une à une. Personne ne sait pourquoi.",
     "Seule une petite silhouette sombre a osé quitter le village pour retrouver l'origine de l'obscurité.",
 ];
-const STORY_DUO = "Cette fois, tu n'es pas seul : un compagnon marche à tes côtés. Ensemble, vous avez plus de chances de rallumer les lanternes.";
+const STORY_DUO = "Cette fois, tu n'es pas seul : une autre silhouette, bleue, a quitté le village. Mais il n'y a qu'une lanterne à rallumer... Que le duel commence.";
 const STORY_SOLO = "Personne ne viendra t'aider. Il ne reste que toi, ta petite lanterne et la nuit.";
 
 const $ = (id) => document.getElementById(id);
@@ -17,6 +48,8 @@ function show(name) {
     clearInterval(typingTimer);
     document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
     $("screen-" + name).classList.add("active");
+    $("app").classList.toggle("in-game", name === "game");
+    if (name !== "game") stopGame();
     if (name === "controls") setControlsView(mode === "duo" ? "duo" : "solo");
 }
 
@@ -72,10 +105,22 @@ function startStory(selectedMode) {
 }
 
 function startGame() {
-    // TODO (2e étape) : générer / lancer le jeu ici
-    $("game-mode").textContent = mode === "duo" ? "Mode duo" : "Mode solo";
     show("game");
+    // création et lancement du jeu à partir de la configuration config
+    game = new Phaser.Game(config);
+    // le mode choisi au menu ("solo" = histoire, "duo" = PvP) est lu par la scène de chargement
+    game.registry.set("mode", mode);
 }
+
+// ferme le jeu Phaser (et coupe la musique) quand on quitte l'écran de jeu
+function stopGame() {
+    if (!game) return;
+    game.destroy(true);
+    game = null;
+}
+
+// envoyé par le bouton "Retour au menu" de la scène de fin
+window.addEventListener("retour-menu", () => show("home"));
 
 document.addEventListener("click", (e) => {
     const btn = e.target.closest("button");

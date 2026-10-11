@@ -21,6 +21,17 @@ body {
 }
 
 #app { width: min(92vw, 640px); padding: 24px 0; }
+/* l'écran de jeu est plus large que les menus */
+#app.in-game { width: min(96vw, 1024px, (100vh - 120px) * 16 / 9); }
+
+#game-container {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border: 3px solid var(--border);
+    box-shadow: 4px 4px 0 #000;
+}
+#game-container[hidden] { display: none; }
 
 .screen {
     display: none;
@@ -47,7 +58,7 @@ h2 { font-size: 1.8rem; color: var(--accent); text-shadow: 3px 3px 0 #000; }
 .sprite {
     width: 96px;
     height: 96px;
-    background: url("src/assets/joueur1.png") 0 0 / 1152px 96px no-repeat;
+    background: url("src/assets/Sprite test .png") 0 0 / 1152px 96px no-repeat;
     image-rendering: pixelated;
     animation: walk 1.2s steps(12) infinite;
 }

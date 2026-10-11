@@ -47,6 +47,7 @@
                     <tr><td>Droite</td><td><kbd>D</kbd></td><td class="p2-col"><kbd>→</kbd></td></tr>
                     <tr><td>Tirer</td><td><kbd>H</kbd></td><td class="p2-col"><kbd>1</kbd></td></tr>
                     <tr><td>Saut</td><td><kbd>[Space]</kbd></td><td class="p2-col"><kbd>2</kbd></td></tr>
+                    <tr><td>Ouvrir une porte</td><td><kbd>E</kbd></td><td class="p2-col">—</td></tr>
                 </tbody>
             </table>
             <p class="note" id="controls-note">En solo, seul le Joueur 1 est utilisé. Échap : retour au menu.</p>
@@ -60,7 +61,7 @@
         <section class="screen" id="screen-credits">
             <h2>Crédits</h2>
             <ul class="credits">
-                <li><span>Conception &amp; développement</span> À compléter</li>
+                <li><span>Conception &amp; développement</span> ILOAI Soane Liku O Hihifo Kavakihahake To'otonu Kinaukovi</li>
                 <li><span>Graphismes</span> À compléter</li>
                 <li><span>Cartes</span> Tiled</li>
                 <li><span>Projet</span> BUT MMI – R312</li>
@@ -68,15 +69,16 @@
             <div class="row"><button data-goto="home" class="secondary">Retour</button></div>
         </section>
 
-        <!-- Écran de jeu (à générer dans un second temps) -->
+        <!-- Écran de jeu : le canvas Phaser est créé dans #game-container -->
         <section class="screen" id="screen-game">
-            <h2>Le jeu arrive bientôt…</h2>
-            <p id="game-mode"></p>
+            <div id="game-container"></div>
             <div class="row"><button data-goto="home" class="secondary">Retour au menu</button></div>
         </section>
         
 
     </main>
-    <script src="src/index.js"></script>
+    <!-- inclusion de Phaser, puis du jeu (chargé en module car réparti sur plusieurs fichiers) -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+    <script src="src/index.js" type="module"></script>
 </body>
 </html>
