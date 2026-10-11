@@ -1,3 +1,7 @@
+// Mise en forme de la page d'accueil (menu, prologue, commandes, crédits, cadre du jeu).
+// Le CSS est écrit ici et ajouté à la page au chargement, ce qui évite un fichier .css
+// et une balise <style> dans index.html.
+const css = `
 :root {
     --bg: #0e024f;
     --bg2: #2600ff;
@@ -137,3 +141,9 @@ kbd {
 
 .credits { list-style: none; display: flex; flex-direction: column; gap: 14px; }
 .credits span { display: block; color: var(--accent); font-size: .85rem; text-transform: uppercase; letter-spacing: .1em; }
+`;
+
+// création de la balise <style> et ajout dans l'en-tête de la page
+const style = document.createElement("style");
+style.textContent = css;
+document.head.appendChild(style);
